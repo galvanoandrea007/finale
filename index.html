@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Negozio Telefoni</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    button {
+      padding: 8px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    #fileInput {
+      margin-bottom: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .nav {
+      margin-bottom: 20px;
+    }
+    .nav button {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav">
+    <button onclick="showPage('upload')">1. Upload JSON</button>
+    <button onclick="showPage('welcome')">2. Benvenuto</button>
+    <button onclick="showPage('prodotti')">3. Lista Prodotti</button>
+    <button onclick="showPage('carrello')">4. Carrello</button>
+    <button onclick="showPage('scontrino')">5. Scontrino</button>
+  </div>
+
+  <!-- Pagina 1: Upload -->
+  <div id="upload" class="page">
+    <h1>Carica i dati dei prodotti</h1>
+    <input type="file" id="fileInput" accept=".json">
+    <p><strong>Nota:</strong> il file JSON deve contenere prodotti con marca, modello, descrizione, immagine, prezzo.</p>
+  </div>
+
+  <!-- Pagina 2: Benvenuto -->
+  <div id="welcome" class="page hidden">
+    <h1>Benvenuto nel nostro negozio di telefoni!</h1>
+    <p>Visualizza i prodotti disponibili cliccando il pulsante qui sopra.</p>
+  </div>
+
+  <!-- Pagina 3: Lista Prodotti -->
+  <div id="prodotti" class="page hidden">
+    <h1>Prodotti disponibili</h1>
+    <div id="lista-prodotti" class="grid"></div>
+  </div>
+
+  <!-- Pagina 4: Carrello -->
+  <div id="carrello" class="page hidden">
+    <h1>Il tuo carrello</h1>
+    <div id="carrello-contenuto"></div>
+  </div>
+
+  <!-- Pagina 5: Scontrino -->
+  <div id="scontrino" class="page hidden">
+    <h1>Scontrino</h1>
+    <div id="scontrino-dettagli"></div>
+  </div>
+
+  <!-- Modal Dettaglio -->
+  <div id="modal" class="hidden" style="position:fixed; top:10%; left:10%; right:10%; background:#fff; border:1px solid #ccc; padding:20px; z-index:1000;">
+    <div id="modal-content"></div>
+    <button onclick="closeModal()">Chiudi</button>
+  </div>
+
+  <script>
+    let prodotti = [];
+    let carrello = [];
+
+    // Gestione pagine
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+
+      if (id === 'prodotti') renderProdotti();
+      if (id === 'carrello') renderCarrello();
+      if (id === 'scontrino') renderScontrino();
+    }
+
+    // Upload file JSON
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const json = JSON.parse(event.target.result);
+          if (Array.isArray(json.prodotti)) {
+            prodotti = json.prodotti;
+            alert("Prodotti caricati con successo!");
+            showPage('welcome');
+          } else {
+            alert("Formato JSON non valido.");
+          }
+        } catch {
+          alert("Errore nel file JSON.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Mostra prodotti
+    function renderProdotti() {
+      const container = document.getElementById('lista-prodotti');
+      container.innerHTML = '';
+      prodotti.forEach((p, index) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <img src="${p.immagine}" alt="${p.modello}">
+          <h3>${p.marca} ${p.modello}</h3>
+          <button onclick="mostraDettaglio(${index})">Dettagli</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Mostra dettaglio prodotto (modal vetrina)
+    function mostraDettaglio(index) {
+      const p = prodotti[index];
+      const modal = document.getElementById('modal');
+      const content = document.getElementById('modal-content');
+      content.innerHTML = `
+        <img src="${p.immagine}" alt="${p.modello}" style="max-width:200px;">
+        <h2>${p.marca} ${p.modello}</h2>
+        <p>${p.descrizione}</p>
+        <p><strong>Prezzo: €${p.prezzo}</strong></p>
+        <button onclick="aggiungiAlCarrello(${index})">Aggiungi al carrello</button>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    // Aggiungi al carrello
+    function aggiungiAlCarrello(index) {
+      carrello.push(prodotti[index]);
+      closeModal();
+      alert("Prodotto aggiunto al carrello!");
+    }
+
+    // Carrello
+    function renderCarrello() {
+      const div = document.getElementById('carrello-contenuto');
+      div.innerHTML = '';
+      if (carrello.length === 0) {
+        div.innerHTML = '<p>Il carrello è vuoto.</p>';
+        return;
+      }
+      carrello.forEach((p, i) => {
+        const item = document.createElement('div');
+        item.innerHTML = `
+          <p>${p.marca} ${p.modello} - €${p.prezzo} <button onclick="rimuoviDalCarrello(${i})">Rimuovi</button></p>
+        `;
+        div.appendChild(item);
+      });
+    }
+
+    function rimuoviDalCarrello(index) {
+      carrello.splice(index, 1);
+      renderCarrello();
+    }
+
+    // Scontrino
+    function renderScontrino() {
+      const div = document.getElementById('scontrino-dettagli');
+      div.innerHTML = '';
+      if (carrello.length === 0) {
+        div.innerHTML = '<p>Nessun prodotto acquistato.</p>';
+        return;
+      }
+      let totale = 0;
+      carrello.forEach(p => {
+        div.innerHTML += `<p>${p.marca} ${p.modello} - €${p.prezzo}</p>`;
+        totale += p.prezzo;
+      });
+      div.innerHTML += `<hr><strong>TOTALE: €${totale}</strong>`;
+    }
+  </script>
+</body>
+</html>
