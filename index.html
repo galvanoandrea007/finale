@@ -2,52 +2,41 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Galva & Boni Telephones</title>
+  <title>Galva & Boni Telephon</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      background: #f1f1f1;
-      color: #333;
+      background: #f2f2f2;
     }
     header {
-      background: #1d3557;
+      background: #1e1e2f;
       color: #fff;
-      padding: 30px 20px;
+      padding: 20px;
       text-align: center;
-      border-bottom: 4px solid #e63946;
     }
-    h1 {
-      font-size: 36px;
-      margin: 0;
-    }
-    h2 {
-      font-size: 28px;
+    h1, h2 {
+      color: #222;
     }
     .nav {
-      background: #e63946;
+      background: #333;
       padding: 10px;
       text-align: center;
     }
     .nav button {
-      background: #457b9d;
+      background: #444;
       color: #fff;
       border: none;
-      padding: 12px 20px;
-      margin: 0 10px;
+      padding: 10px 20px;
+      margin: 0 5px;
       cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
+      border-radius: 4px;
     }
     .nav button:hover {
-      background: #1d3557;
+      background: #666;
     }
     .page {
-      padding: 30px;
-      display: none;
-    }
-    .page.hidden {
-      display: block;
+      padding: 20px;
     }
     .grid {
       display: flex;
@@ -58,11 +47,11 @@
     .card {
       background: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      width: 240px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      width: 220px;
       text-align: center;
-      transition: transform 0.3s ease;
+      transition: transform 0.2s;
     }
     .card:hover {
       transform: scale(1.05);
@@ -71,58 +60,40 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .card h3 {
-      margin: 10px 0;
-      font-size: 18px;
     }
     button {
-      padding: 10px 15px;
-      margin-top: 15px;
+      padding: 8px 12px;
+      margin-top: 10px;
       cursor: pointer;
       border: none;
-      background: #1d3557;
+      background: #1e90ff;
       color: #fff;
-      border-radius: 5px;
-      font-size: 16px;
+      border-radius: 4px;
     }
     button:hover {
-      background: #e63946;
-    }
-    #modal {
-      position: fixed;
-      top: 20%;
-      left: 20%;
-      right: 20%;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      z-index: 1000;
-    }
-    #modal-content {
-      text-align: center;
+      background: #0c6cd4;
     }
     .hidden {
       display: none;
     }
-    .footer {
-      background: #1d3557;
-      color: #fff;
-      text-align: center;
-      padding: 15px;
-      position: absolute;
-      width: 100%;
-      bottom: 0;
+    #modal {
+      position: fixed;
+      top: 10%;
+      left: 10%;
+      right: 10%;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Galva & Boni Telephones</h1>
-  <p>I migliori telefoni, con tecnologia all'avanguardia!</p>
+  <h1>Galva & Boni Telephon</h1>
+  <p>Il meglio della tecnologia mobile, con stile!</p>
 </header>
 
 <div class="nav">
@@ -132,18 +103,18 @@
   <button onclick="showPage('scontrino')">Scontrino</button>
 </div>
 
-<div id="welcome" class="page hidden">
-  <h2>Benvenuto nel nostro negozio!</h2>
-  <p>Scopri la nostra esclusiva selezione di smartphone con le migliori offerte!</p>
+<div id="welcome" class="page">
+  <h2>Benvenuto nel nostro negozio</h2>
+  <p>Scopri la selezione esclusiva di smartphone!</p>
 </div>
 
 <div id="prodotti" class="page hidden">
-  <h2>Prodotti Disponibili</h2>
+  <h2>Prodotti disponibili</h2>
   <div id="lista-prodotti" class="grid"></div>
 </div>
 
 <div id="carrello" class="page hidden">
-  <h2>Il Tuo Carrello</h2>
+  <h2>Il tuo carrello</h2>
   <div id="carrello-contenuto"></div>
 </div>
 
@@ -157,10 +128,6 @@
   <button onclick="closeModal()">Chiudi</button>
 </div>
 
-<div class="footer">
-  <p>&copy; 2025 Galva & Boni Telephones - Tutti i diritti riservati.</p>
-</div>
-
 <script>
 // Dati dei prodotti (inclusi direttamente nel codice JSON)
 const prodotti = [
@@ -168,38 +135,72 @@ const prodotti = [
     "marca": "Samsung",
     "modello": "Galaxy S23",
     "descrizione": "RAM: 8GB, Memoria: 256GB, Fotocamera: 108MP",
-    "immagine": "https://images.unsplash.com/photo-1626097362695-145ea8e0b8b9?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA&ixlib=rb-1.2.1&q=80&w=400",
+    "immagine": "https://via.placeholder.com/200x200?text=Samsung+S23",
     "prezzo": 899
   },
   {
     "marca": "Apple",
     "modello": "iPhone 14",
     "descrizione": "RAM: 6GB, Memoria: 128GB, Fotocamera: 48MP",
-    "immagine": "https://images.unsplash.com/photo-1607083242015-e98269cdafc7?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA&ixlib=rb-1.2.1&q=80&w=400",
+    "immagine": "https://via.placeholder.com/200x200?text=iPhone+14",
     "prezzo": 1099
   },
   {
     "marca": "Google",
     "modello": "Pixel 7",
     "descrizione": "RAM: 8GB, Memoria: 128GB, Fotocamera: 50MP",
-    "immagine": "https://images.unsplash.com/photo-1629993065817-d1decbf72f77?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA&ixlib=rb-1.2.1&q=80&w=400",
+    "immagine": "https://via.placeholder.com/200x200?text=Pixel+7",
     "prezzo": 799
   },
   {
     "marca": "OnePlus",
     "modello": "OnePlus 11",
     "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
-    "immagine": "https://images.unsplash.com/photo-1580878984294-9519a9d137eb?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA&ixlib=rb-1.2.1&q=80&w=400",
+    "immagine": "https://via.placeholder.com/200x200?text=OnePlus+11",
     "prezzo": 949
   },
   {
     "marca": "Xiaomi",
     "modello": "Xiaomi 13 Pro",
     "descrizione": "RAM: 12GB, Memoria: 512GB, Fotocamera: 50MP",
-    "immagine": "https://images.unsplash.com/photo-1624980331521-e01413e91c5d?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA&ixlib=rb-1.2.1&q=80&w=400",
+    "immagine": "https://via.placeholder.com/200x200?text=Xiaomi+13+Pro",
     "prezzo": 799
+  },
+  {
+    "marca": "Oppo",
+    "modello": "Oppo Find X5 Pro",
+    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
+    "immagine": "https://via.placeholder.com/200x200?text=Oppo+Find+X5+Pro",
+    "prezzo": 999
+  },
+  {
+    "marca": "Sony",
+    "modello": "Xperia 1 IV",
+    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 48MP",
+    "immagine": "https://via.placeholder.com/200x200?text=Xperia+1+IV",
+    "prezzo": 1299
+  },
+  {
+    "marca": "Asus",
+    "modello": "Asus ROG Phone 6",
+    "descrizione": "RAM: 16GB, Memoria: 512GB, Fotocamera: 50MP",
+    "immagine": "https://via.placeholder.com/200x200?text=Asus+ROG+Phone+6",
+    "prezzo": 1099
+  },
+  {
+    "marca": "Huawei",
+    "modello": "Mate 50 Pro",
+    "descrizione": "RAM: 8GB, Memoria: 256GB, Fotocamera: 50MP",
+    "immagine": "https://via.placeholder.com/200x200?text=Huawei+Mate+50+Pro",
+    "prezzo": 1099
+  },
+  {
+    "marca": "Vivo",
+    "modello": "Vivo X90 Pro",
+    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
+    "immagine": "https://via.placeholder.com/200x200?text=Vivo+X90+Pro",
+    "prezzo": 1099
   }
-  // Puoi aggiungere altri prodotti qui se lo desideri.
 ];
 
 let carrello = [];
