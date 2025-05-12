@@ -16,7 +16,7 @@
       text-align: center;
     }
     h1, h2 {
-      color: #222;
+      color: white;
     }
     .nav {
       background: #333;
@@ -87,21 +87,6 @@
       padding: 20px;
       z-index: 1000;
     }
-    .form-container {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .form-container input, .form-container button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
   </style>
 </head>
 <body>
@@ -115,44 +100,56 @@
   <button onclick="showPage('welcome')">Benvenuto</button>
   <button onclick="showPage('prodotti')">Prodotti</button>
   <button onclick="showPage('carrello')">Carrello</button>
-  <button onclick="showPage('scontrino')">Scontrino</button>
+  <button onclick="showPage('registrazione')">Registrazione</button>
 </div>
 
-<div id="welcome" class="page">
+<!-- Pagina di registrazione -->
+<div id="registrazione" class="page hidden">
+  <h2>Registrazione</h2>
+  <form onsubmit="registrati(event)">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" required><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required><br><br>
+    <button type="submit">Registrati</button>
+  </form>
+</div>
+
+<!-- Pagina di benvenuto -->
+<div id="welcome" class="page hidden">
   <h2>Benvenuto nel nostro negozio</h2>
-  <p>Per iniziare, registrati o accedi!</p>
-  <div class="form-container">
-    <h3>Registrati</h3>
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="registrati()">Registrati</button>
-  </div>
+  <p>Scopri la selezione esclusiva di smartphone!</p>
 </div>
 
+<!-- Pagina dei prodotti -->
 <div id="prodotti" class="page hidden">
   <h2>Prodotti disponibili</h2>
   <div id="lista-prodotti" class="grid"></div>
 </div>
 
+<!-- Pagina del carrello -->
 <div id="carrello" class="page hidden">
   <h2>Il tuo carrello</h2>
   <div id="carrello-contenuto"></div>
-  <button onclick="confermaAcquisto()">Conferma e vai allo scontrino</button>
+  <button onclick="confermaAcquisto()">Conferma Acquisto</button>
 </div>
 
+<!-- Pagina dello scontrino -->
 <div id="scontrino" class="page hidden">
   <h2>Scontrino</h2>
   <div id="scontrino-dettagli"></div>
 </div>
 
+<!-- Modal per dettagli prodotto -->
 <div id="modal" class="hidden">
   <div id="modal-content"></div>
   <button onclick="closeModal()">Chiudi</button>
 </div>
 
 <script>
-// Dati dei prodotti (inclusi direttamente nel codice JSON)
+// Dati dei prodotti
 const prodotti = [
   {
     "marca": "Samsung",
@@ -168,66 +165,12 @@ const prodotti = [
     "immagine": "https://via.placeholder.com/200x200?text=iPhone+14",
     "prezzo": 1099
   },
-  {
-    "marca": "Google",
-    "modello": "Pixel 7",
-    "descrizione": "RAM: 8GB, Memoria: 128GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Pixel+7",
-    "prezzo": 799
-  },
-  {
-    "marca": "OnePlus",
-    "modello": "OnePlus 11",
-    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=OnePlus+11",
-    "prezzo": 949
-  },
-  {
-    "marca": "Xiaomi",
-    "modello": "Xiaomi 13 Pro",
-    "descrizione": "RAM: 12GB, Memoria: 512GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Xiaomi+13+Pro",
-    "prezzo": 799
-  },
-  {
-    "marca": "Oppo",
-    "modello": "Oppo Find X5 Pro",
-    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Oppo+Find+X5+Pro",
-    "prezzo": 999
-  },
-  {
-    "marca": "Sony",
-    "modello": "Xperia 1 IV",
-    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 48MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Xperia+1+IV",
-    "prezzo": 1299
-  },
-  {
-    "marca": "Asus",
-    "modello": "Asus ROG Phone 6",
-    "descrizione": "RAM: 16GB, Memoria: 512GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Asus+ROG+Phone+6",
-    "prezzo": 1099
-  },
-  {
-    "marca": "Huawei",
-    "modello": "Mate 50 Pro",
-    "descrizione": "RAM: 8GB, Memoria: 256GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Huawei+Mate+50+Pro",
-    "prezzo": 1099
-  },
-  {
-    "marca": "Vivo",
-    "modello": "Vivo X90 Pro",
-    "descrizione": "RAM: 12GB, Memoria: 256GB, Fotocamera: 50MP",
-    "immagine": "https://via.placeholder.com/200x200?text=Vivo+X90+Pro",
-    "prezzo": 1099
-  }
+  // Altri prodotti...
 ];
 
 let carrello = [];
 
+// Funzione per mostrare una pagina
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -237,6 +180,22 @@ function showPage(id) {
   if (id === 'scontrino') renderScontrino();
 }
 
+// Funzione per registrare l'utente
+function registrati(event) {
+  event.preventDefault();
+  // Recupera i dati del form
+  const nome = document.getElementById('nome').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  // Salva i dati (può essere salvato in un DB, ma qui lo simuliamo)
+  alert(`Registrazione completata per ${nome}!`);
+
+  // Reindirizza l'utente alla pagina di benvenuto
+  showPage('welcome');
+}
+
+// Funzione per renderizzare i prodotti
 function renderProdotti() {
   const container = document.getElementById('lista-prodotti');
   container.innerHTML = '';
@@ -252,6 +211,7 @@ function renderProdotti() {
   });
 }
 
+// Mostra il dettaglio di un prodotto
 function mostraDettaglio(index) {
   const p = prodotti[index];
   const modal = document.getElementById('modal');
@@ -266,16 +226,19 @@ function mostraDettaglio(index) {
   modal.classList.remove('hidden');
 }
 
+// Chiudi il modal
 function closeModal() {
   document.getElementById('modal').classList.add('hidden');
 }
 
+// Aggiungi al carrello
 function aggiungiAlCarrello(index) {
   carrello.push(prodotti[index]);
   closeModal();
   alert("Prodotto aggiunto al carrello!");
 }
 
+// Renderizza il carrello
 function renderCarrello() {
   const div = document.getElementById('carrello-contenuto');
   div.innerHTML = '';
@@ -292,20 +255,14 @@ function renderCarrello() {
   });
 }
 
+// Rimuovi dal carrello
 function rimuoviDalCarrello(index) {
   carrello.splice(index, 1);
   renderCarrello();
 }
 
+// Conferma l'acquisto e porta allo scontrino
 function confermaAcquisto() {
-  if (carrello.length > 0) {
-    showPage('scontrino');
-  } else {
-    alert("Il carrello è vuoto.");
-  }
-}
-
-function renderScontrino() {
   const div = document.getElementById('scontrino-dettagli');
   div.innerHTML = '';
   if (carrello.length === 0) {
@@ -318,20 +275,10 @@ function renderScontrino() {
     totale += p.prezzo;
   });
   div.innerHTML += `<hr><strong>TOTALE: €${totale}</strong>`;
-}
-
-// Funzione di registrazione
-function registrati() {
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  if (nome && email && password) {
-    alert("Registrazione avvenuta con successo!");
-    // In un'applicazione reale, qui invieresti i dati al server
-  } else {
-    alert("Per favore, compila tutti i campi!");
-  }
+  
+  // Svuota il carrello
+  carrello = [];
+  renderCarrello();
 }
 </script>
 
